@@ -1,6 +1,11 @@
 import pandas as pd
 import os
 import kaggle
+import seaborn as sns
+
+pd.set_option('display.max_columns', None)
+pd.set_option('display.max_rows', None)
+pd.set_option('display.width', None)
 
 #Details
 file_name = "openaq.csv"
@@ -16,7 +21,11 @@ else:
 
 #Preprocess data
 data = pd.read_csv(file_name, delimiter=';', index_col=[0])
+data.head()
 numeric_columns = data.select_dtypes(include=['float64', 'int64']).columns
 data[numeric_columns] = data[numeric_columns].fillna(data[numeric_columns].mean())
 #data = data.fillna(data.mean(axis=0))
-data.tail()
+print(data.head(10))
+
+
+
