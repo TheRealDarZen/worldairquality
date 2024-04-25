@@ -22,11 +22,11 @@ for file_name, dataset_path in zip(file_names, dataset_paths):
         print(f"File {file_name} already exists.")
 
 #Preprocess data
-data_openaq = preprocess_data("openaq.csv", ';')
-data_world_population = preprocess_data("world_population.csv", ',')
+def get_preprocessed_data():
+    data_openaq = preprocess_data("openaq.csv", ';')
+    data_world_population = preprocess_data("world_population.csv", ',')
 
-print(data_openaq.head(10))
-print(data_world_population.head(10))
+    return data_openaq, data_world_population
 
 
 
