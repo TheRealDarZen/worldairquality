@@ -2,6 +2,7 @@ import pandas as pd
 import os
 import kaggle
 import seaborn as sns
+from preprocess_data import preprocess_data
 
 pd.set_option('display.max_columns', None)
 pd.set_option('display.max_rows', None)
@@ -21,12 +22,11 @@ for file_name, dataset_path in zip(file_names, dataset_paths):
         print(f"File {file_name} already exists.")
 
 #Preprocess data
-'''data = pd.read_csv(file_name, delimiter=';', index_col=[0])
-data.head()
-numeric_columns = data.select_dtypes(include=['float64', 'int64']).columns
-data[numeric_columns] = data[numeric_columns].fillna(data[numeric_columns].mean())
-#data = data.fillna(data.mean(axis=0))
-print(data.head(10))'''
+data_openaq = preprocess_data("openaq.csv", ';')
+data_world_population = preprocess_data("world_population.csv", ',')
+
+print(data_openaq.head(10))
+print(data_world_population.head(10))
 
 
 
