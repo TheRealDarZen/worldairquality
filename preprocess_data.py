@@ -6,6 +6,4 @@ def preprocess_data(file_name, delimeter):
     numeric_columns = data.select_dtypes(include=['float64', 'int64']).columns
     data[numeric_columns] = data[numeric_columns].fillna(data[numeric_columns].mean())
 
-    sorted_data = data.sort_values(by='Country Code')
-
-    return sorted_data
+    return data
