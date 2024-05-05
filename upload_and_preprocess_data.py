@@ -29,8 +29,9 @@ def download():
 def get_preprocessed_data():
     data_co2 = preprocess_data("CO2_emission.csv", ',')
     data_world_population = preprocess_data("world_population.csv", ',')
+    data_pm_25 = preprocess_data("PM25-air-pollution.csv", ',')
 
-    return data_co2, data_world_population
+    return data_co2, data_world_population, data_pm_25
 
 if __name__ == "__main__":
     download()

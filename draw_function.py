@@ -4,40 +4,82 @@ from mpl_toolkits.mplot3d import Axes3D
 
 from upload_and_preprocess_data import get_preprocessed_data
 
-# Get preprocessed data
-co2_df, population_df = get_preprocessed_data()
 
-# Merge data
-merged_df = pd.merge(co2_df, population_df, left_on='country_code', right_on='CCA3', how='inner')
+def fill_missing_population(country: str):
+    # Read the world population data from the CSV file
+    _, population_df, _ = get_preprocessed_data()
 
-# Plotting
-country_to_plot = 'AFG'
-years_to_plot = ['1990', '2000', '2010', '2015']
+    # Filter data for the specified country
+    country_data = population_df[population_df['CCA3'] == country]
 
-# Filtering data
-country_data = merged_df[merged_df['country_code'] == country_to_plot]
+    # Specify the years to extract population data for
+    years_av = [1990, 2000, 2010, 2015, 2020]
 
-# Creating a 3D plot
-fig = plt.figure()
-ax = fig.add_subplot(111, projection='3d')
+    # Extract population numbers for the specified years
+    population = []
+    for year in years_av:
+        population_column = f'{year} Population'
+        population.append(country_data[population_column].values[0])
 
-# Plotting the data for the country
-x_values = []
-y_values = []
-z_values = []
+    # Fill in missing years using arithmetic progression
+    filled_population = []
+    for index, year in enumerate(years_av):
+        if index == len(years_av) - 1:
+            filled_population.append(population[index])
+            break
 
-for year in years_to_plot:
-    population_column = f'{year} Population'  # Construct the population column name
-    x_values.append(country_data[population_column].values[0])  # Append population value
-    y_values.append(country_data[year].values[0])  # Append CO2 emissions value
-    z_values.append(int(year))  # Append year as integer
+        filled_population.append(population[index])
+        next_year = years_av[index + 1]
+        steps = next_year - year - 1
+        value_dif = population[index + 1] - population[index]
+        add_on_step = int(value_dif / steps)
 
-# Connect data points
-ax.plot(x_values, y_values, z_values, label=f'{country_to_plot} Data', marker='o')
+        for _ in range(steps):
+            filled_population.append(filled_population[-1] + add_on_step)
 
-ax.set_xlabel('Population')
-ax.set_ylabel('CO2 Emissions (metric tons per capita)')
-ax.set_zlabel('Year')
-ax.set_title(f'{country_to_plot}')
+    return filled_population
 
-plt.show()
+
+def draw_3d_function(country: str, start_year: int, end_year: int):
+    # Get preprocessed data
+    co2_df, population_df, pm25_df = get_preprocessed_data()
+
+    # Merge data
+    merged_df = pd.merge(co2_df, population_df, left_on='country_code', right_on='CCA3', how='inner')
+
+    # Plotting
+    country_to_plot = country
+
+    # Filtering data
+    country_data = merged_df[merged_df['country_code'] == country_to_plot]
+
+    # Creating a 3D plot
+    fig = plt.figure()
+    ax = fig.add_subplot(111, projection='3d')
+
+    # Plotting the data for the country
+    population_raw = fill_missing_population(country)
+    population = []
+    pollution = []
+    years = []
+
+    # Fill arrays with data
+    for i in range(end_year - start_year + 1):
+        year = i + start_year
+        population.append(population_raw[i])
+        pollution.append(country_data[f'{year}'].values[0])  # Append CO2 emissions value
+        years.append(year)
+
+    # Connect data points
+    ax.plot(population, pollution, years, label=f'{country_data['Country/Territory']} Data', marker='.')
+
+    ax.set_xlabel('Population')
+    ax.set_ylabel('CO2 Emissions (metric tons per capita)')
+    ax.set_zlabel('Year')
+    ax.set_title(f'{country_to_plot}')
+
+    plt.show()
+
+
+if __name__ == "__main__":
+    draw_3d_function('AFG', 1990, 2019)
