@@ -76,13 +76,13 @@ def draw_3d_function(country: str, start_year: int, end_year: int):
     co2_df, population_df, pm25_df = get_preprocessed_data()
 
     # Merge data
-    merged_df = pd.merge(co2_df, population_df, left_on='country_code', right_on='CCA3', how='inner')
+    merged_df = pd.merge(pm25_df, population_df, left_on='Code', right_on='CCA3', how='inner')
 
     # Plotting
     country_to_plot = country
 
     # Filtering data
-    country_data = merged_df[merged_df['country_code'] == country_to_plot]
+    country_data = merged_df[merged_df['Code'] == country_to_plot]
 
     # Creating a 3D plot
     fig = plt.figure()
@@ -91,6 +91,7 @@ def draw_3d_function(country: str, start_year: int, end_year: int):
     # Plotting the data for the country
     population_raw = fill_missing_population(country)
     population = []
+    pollution_raw = fill_missing_pm25(country)
     pollution = []
     years = []
 
@@ -98,14 +99,14 @@ def draw_3d_function(country: str, start_year: int, end_year: int):
     for i in range(end_year - start_year + 1):
         year = i + start_year
         population.append(population_raw[i])
-        pollution.append(country_data[f'{year}'].values[0])  # Append CO2 emissions value
+        pollution.append(pollution_raw[i])
         years.append(year)
 
     # Connect data points
     ax.plot(population, pollution, years, label=f'{country_data['Country/Territory']} Data', marker='.')
 
     ax.set_xlabel('Population')
-    ax.set_ylabel('CO2 Emissions (metric tons per capita)')
+    ax.set_ylabel('PM2.5 air pollution, mean annual exposure (micrograms per cubic meter)')
     ax.set_zlabel('Year')
     ax.set_title(f'{country_to_plot}')
 
@@ -113,5 +114,4 @@ def draw_3d_function(country: str, start_year: int, end_year: int):
 
 
 if __name__ == "__main__":
-    fill_missing_pm25('AFG')
-    #draw_3d_function('AFG', 1990, 2019)
+    draw_3d_function('AFG', 1990, 2017) # max. 2017 for now
