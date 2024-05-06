@@ -22,7 +22,7 @@ def fill_missing_population(country: str):
         population.append(country_data[population_column].values[0])
 
     # Fill in missing years using arithmetic progression
-    filled_population = []
+    filled_population = [] # year = index + 1990
     for index, year in enumerate(years_av):
         if index == len(years_av) - 1:
             filled_population.append(population[index])
@@ -31,13 +31,44 @@ def fill_missing_population(country: str):
         filled_population.append(population[index])
         next_year = years_av[index + 1]
         steps = next_year - year - 1
-        value_dif = population[index + 1] - population[index]
-        add_on_step = int(value_dif / steps)
+        if steps > 0:
+            value_dif = population[index + 1] - population[index]
+            add_on_step = int(value_dif / steps)
 
-        for _ in range(steps):
-            filled_population.append(filled_population[-1] + add_on_step)
+            for _ in range(steps):
+                filled_population.append(filled_population[-1] + add_on_step)
 
     return filled_population
+
+def fill_missing_pm25(country: str):
+    _, _, pm25_df = get_preprocessed_data()
+
+    country_data = pm25_df[pm25_df['Code'] == country]
+
+    years_av = [1990, 1995, 2000, 2005, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017]
+
+    pollution = []
+
+    for year in years_av:
+        pollution.append(country_data['PM2.5 air pollution, mean annual exposure (micrograms per cubic meter)'].values[country_data['Year'] == year][0])
+
+    filled_pollution = [] # year = index + 1990
+    for index, year in enumerate(years_av):
+        if index == len(years_av) - 1:
+            filled_pollution.append(pollution[index])
+            break
+
+        filled_pollution.append(pollution[index])
+        next_year = years_av[index + 1]
+        steps = next_year - year - 1
+        if steps > 0:
+            value_dif = pollution[index + 1] - pollution[index]
+            add_on_step = int(value_dif / steps)
+
+            for _ in range(steps):
+                filled_pollution.append(filled_pollution[-1] + add_on_step)
+
+    return filled_pollution
 
 
 def draw_3d_function(country: str, start_year: int, end_year: int):
@@ -82,4 +113,5 @@ def draw_3d_function(country: str, start_year: int, end_year: int):
 
 
 if __name__ == "__main__":
-    draw_3d_function('AFG', 1990, 2019)
+    fill_missing_pm25('AFG')
+    #draw_3d_function('AFG', 1990, 2019)
