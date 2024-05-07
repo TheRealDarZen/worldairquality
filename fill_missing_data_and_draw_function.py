@@ -36,7 +36,7 @@ def fill_missing_population(country: str):
             add_on_step = int(value_dif / steps)
 
             for _ in range(steps):
-                filled_population.append(filled_population[-1] + add_on_step)
+                filled_population.append((filled_population[-1] + add_on_step))
 
     return filled_population
 
@@ -63,10 +63,10 @@ def fill_missing_pm25(country: str):
         steps = next_year - year - 1
         if steps > 0:
             value_dif = pollution[index + 1] - pollution[index]
-            add_on_step = int(value_dif / steps)
+            add_on_step = value_dif / steps
 
             for _ in range(steps):
-                filled_pollution.append(filled_pollution[-1] + add_on_step)
+                filled_pollution.append((filled_pollution[-1] + add_on_step))
 
     return filled_pollution
 
@@ -110,7 +110,19 @@ def draw_3d_function(country: str, start_year: int, end_year: int):
     ax.set_zlabel('Year')
     ax.set_title(f'{country_data['Country/Territory'].values[0]}')
 
+    data = {
+        'Year': years,
+        'Population': population,
+        'PM2.5 Pollution (µg/m³)': pollution
+    }
+
+    df = pd.DataFrame(data)
+
+    print(df)
+
     plt.show()
+
+
 
 
 if __name__ == "__main__":
