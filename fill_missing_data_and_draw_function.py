@@ -103,12 +103,12 @@ def draw_3d_function(country: str, start_year: int, end_year: int):
         years.append(year)
 
     # Connect data points
-    ax.plot(population, pollution, years, label=f'{country_data['Country/Territory']} Data', marker='.')
+    ax.plot(population, pollution, years, marker='.')
 
     ax.set_xlabel('Population')
     ax.set_ylabel('PM2.5 air pollution, mean annual exposure (micrograms per cubic meter)')
     ax.set_zlabel('Year')
-    ax.set_title(f'{country_to_plot}')
+    ax.set_title(f'{country_data['Country/Territory'].values[0]}')
 
     plt.show()
 
