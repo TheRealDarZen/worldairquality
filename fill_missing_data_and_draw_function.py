@@ -71,6 +71,48 @@ def fill_missing_pm25(country: str):
     return filled_pollution
 
 
+def get_processed_data():
+    co2_df, population_df, pm25_df = get_preprocessed_data()
+
+    # All countries and years considered
+    countries = population_df['Country/Territory'].values
+    country_symbols = population_df['CCA3'].values
+    years = []
+    for i in range(28): # 1990-2017
+        years.append(i+1990)
+
+    # Creating a dictionary with data for each country (Year, Population, Pollution)
+    country_years_populations_pollutions = []
+
+    for index, country in enumerate(countries):
+        country_symbol = country_symbols[index]
+
+        population = fill_missing_population(country_symbol)[:-3] # 2020-3=2017
+        pollution = fill_missing_pm25(country_symbol)
+
+        data_for_country = {'Country': country, 'Year': years, 'Population': population, 'Pollution': pollution}
+        country_years_populations_pollutions.append(data_for_country)
+
+    # Creating a dataframe with the data from the dictionary above
+    dataframes = []
+
+    for cell in country_years_populations_pollutions:
+        country_cloned = [cell['Country']] * len(years)
+        data = {
+            'Country': country_cloned,
+            'Year': cell['Year'],
+            'Population': cell['Population'],
+            'PM2.5 Pollution (µg/m³)': cell['Pollution']
+        }
+        df = pd.DataFrame(data)
+        dataframes.append(df)
+
+    combined_dataframe = pd.concat(dataframes, ignore_index=True)
+    print(combined_dataframe)
+
+    return country_years_populations_pollutions, combined_dataframe
+
+
 def draw_3d_function(country: str, start_year: int, end_year: int):
     # Get preprocessed data
     co2_df, population_df, pm25_df = get_preprocessed_data()
@@ -123,7 +165,15 @@ def draw_3d_function(country: str, start_year: int, end_year: int):
     plt.show()
 
 
+def population_pollution_function(year):
+    _, population_df, pm25_df = get_preprocessed_data()
+
+    merged_df = pd.merge(pm25_df, population_df, left_on='Code', right_on='CCA3', how='inner')
+
+
+
 
 
 if __name__ == "__main__":
-    draw_3d_function('AFG', 1990, 2017) # max. 2017 for now
+    #draw_3d_function('AFG', 1990, 2017) # max. 2017 for now
+    get_processed_data()
