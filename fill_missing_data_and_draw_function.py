@@ -86,6 +86,8 @@ def get_processed_data():
 
     for index, country in enumerate(countries):
         country_symbol = country_symbols[index]
+        if pm25_df[pm25_df['Code'] == country_symbol].empty:
+            continue
 
         population = fill_missing_population(country_symbol)[:-3] # 2020-3=2017
         pollution = fill_missing_pm25(country_symbol)
@@ -175,5 +177,5 @@ def population_pollution_function(year):
 
 
 if __name__ == "__main__":
-    #draw_3d_function('AFG', 1990, 2017) # max. 2017 for now
-    get_processed_data()
+    draw_3d_function('AFG', 1990, 2017) # max. 2017 for now
+    #get_processed_data()
