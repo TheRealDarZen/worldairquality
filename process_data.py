@@ -103,7 +103,7 @@ def get_processed_data():
         pollution = fill_missing_pm25(country_symbol)
         co2 = fill_missing_co2(country_symbol)[:-2] # 2020-3=2017
 
-        data_for_country = {'Country': country, 'Year': years, 'Population': population, 'Pollution': pollution, 'CO2': co2}
+        data_for_country = {'Country': country, 'Code': country_symbol, 'Year': years, 'Population': population, 'Pollution': pollution, 'CO2': co2}
         country_years_populations_pollutions_co2.append(data_for_country)
 
     # Creating a dataframe with the data from the dictionary above
@@ -111,8 +111,10 @@ def get_processed_data():
 
     for cell in country_years_populations_pollutions_co2:
         country_cloned = [cell['Country']] * len(years)
+        code_cloned = [cell['Code']] * len(years)
         data = {
             'Country': country_cloned,
+            'Code': code_cloned,
             'Year': cell['Year'],
             'Population': cell['Population'],
             'Pollution': cell['Pollution'],
