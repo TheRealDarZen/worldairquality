@@ -1,6 +1,6 @@
 import sys
 
-import fill_missing_data_and_draw_function as fmddf
+import draw_functions as fmddf
 
 if __name__ == "__main__":
     print('Enter country name: ')
