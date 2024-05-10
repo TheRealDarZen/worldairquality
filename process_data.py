@@ -69,47 +69,61 @@ def fill_missing_pm25(country: str):
     return filled_pollution
 
 
+def fill_missing_co2(country: str):
+    co2_df, _, _ = get_preprocessed_data()
+
+    country_data = co2_df[co2_df['country_code'] == country]
+
+    years_av = list(range(1990, 2020))
+
+    co2 = []
+
+    for year in years_av:
+        co2.append(country_data[f'{year}'].values[0])
+
+    return co2
+
 def get_processed_data():
     co2_df, population_df, pm25_df = get_preprocessed_data()
 
     # All countries and years considered
     countries = population_df['Country/Territory'].values
     country_symbols = population_df['CCA3'].values
-    years = []
-    for i in range(28): # 1990-2017
-        years.append(i+1990)
+    years = list(range(1990, 2018))
 
     # Creating a dictionary with data for each country (Year, Population, Pollution)
-    country_years_populations_pollutions = []
+    country_years_populations_pollutions_co2 = []
 
     for index, country in enumerate(countries):
         country_symbol = country_symbols[index]
-        if pm25_df[pm25_df['Code'] == country_symbol].empty:
+        if pm25_df[pm25_df['Code'] == country_symbol].empty or co2_df[co2_df['country_code'] == country_symbol].empty:
             continue
 
         population = fill_missing_population(country_symbol)[:-3] # 2020-3=2017
         pollution = fill_missing_pm25(country_symbol)
+        co2 = fill_missing_co2(country_symbol)[:-2] # 2020-3=2017
 
-        data_for_country = {'Country': country, 'Year': years, 'Population': population, 'Pollution': pollution}
-        country_years_populations_pollutions.append(data_for_country)
+        data_for_country = {'Country': country, 'Year': years, 'Population': population, 'Pollution': pollution, 'CO2': co2}
+        country_years_populations_pollutions_co2.append(data_for_country)
 
     # Creating a dataframe with the data from the dictionary above
     dataframes = []
 
-    for cell in country_years_populations_pollutions:
+    for cell in country_years_populations_pollutions_co2:
         country_cloned = [cell['Country']] * len(years)
         data = {
             'Country': country_cloned,
             'Year': cell['Year'],
             'Population': cell['Population'],
-            'Pollution': cell['Pollution']
+            'Pollution': cell['Pollution'],
+            'CO2': cell['CO2']
         }
         df = pd.DataFrame(data)
         dataframes.append(df)
 
     combined_dataframe = pd.concat(dataframes, ignore_index=True)
 
-    return country_years_populations_pollutions, combined_dataframe
+    return country_years_populations_pollutions_co2, combined_dataframe
 
 
 if __name__ == "__main__":
