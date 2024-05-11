@@ -8,8 +8,6 @@ import matplotlib.tri as mtri
 
 
 def draw_population_pollution_year_plane(data_df):
-    countries = sorted(list(set(data_df['Country'])))
-
     fig = plt.figure()
     ax = fig.add_subplot(111, projection='3d')
 
@@ -84,8 +82,31 @@ def population_pollution_function(year):
     plt.show()
 
 
+def co2_pollution_function(year):
+    _, data_df = get_processed_data()
+
+    year_data = data_df[data_df['Year'] == year]
+
+    co2 = year_data['CO2']
+    pollution = year_data['Pollution']
+
+    z = np.polyfit(co2, pollution, 1)
+    trendline = np.poly1d(z)
+
+    plt.scatter(co2, pollution, marker='.')
+    plt.plot(co2, trendline(co2), color='red')
+
+    plt.xlabel('CO2')
+    plt.ylabel('Pollution')
+    plt.title('CO2 vs Pollution')
+
+    plt.grid(True)
+    plt.show()
+
+
 if __name__ == "__main__":
     #draw_population_pollution_year_function('Algeria', get_processed_data()[1])
     #get_processed_data()
     #population_pollution_function(1990)
-    draw_population_pollution_year_plane(get_processed_data()[1])
+    #draw_population_pollution_year_plane(get_processed_data()[1])
+    co2_pollution_function(1990)
