@@ -4,6 +4,7 @@ from mpl_toolkits.mplot3d import Axes3D
 from process_data import get_processed_data
 from scipy import stats
 import numpy as np
+import matplotlib.tri as mtri
 
 
 def draw_population_pollution_year_plane(data_df):
@@ -12,18 +13,27 @@ def draw_population_pollution_year_plane(data_df):
     fig = plt.figure()
     ax = fig.add_subplot(111, projection='3d')
 
-    years = list(range(1990, 2018))
+    '''years = list(range(1990, 2018))
 
     for country in countries:
         country_data = data_df[data_df['Country'] == country]
         population = country_data['Population']
         pollution = country_data['Pollution']
 
-        ax.scatter(population, pollution, years, marker='.')
+        ax.scatter(population, pollution, years, marker='.')'''
 
-        ax.set_xlabel('Population')
-        ax.set_ylabel('PM2.5')
-        ax.set_zlabel('Year')
+
+    population = data_df['Population']
+    pollution = data_df['Pollution']
+    years = data_df['Year']
+    surf = ax.plot_trisurf(population, pollution, years, cmap='viridis')
+
+
+
+
+    ax.set_xlabel('Population')
+    ax.set_ylabel('PM2.5')
+    ax.set_zlabel('Year')
 
     plt.show()
 
