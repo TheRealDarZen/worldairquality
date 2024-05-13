@@ -58,7 +58,7 @@ def download():
 
         data = zip(countries, gdps)
 
-        with open(csv_file, mode='w', newline='') as file:
+        with open(csv_file, mode='w', newline='', encoding='utf-8') as file:
             writer = csv.writer(file)
             writer.writerow(['Country', 'GDP'])
             writer.writerows(data)
@@ -84,8 +84,9 @@ def get_preprocessed_data():
     data_co2 = preprocess_data("CO2_emission.csv", ',')
     data_world_population = preprocess_data("world_population.csv", ',')
     data_pm_25 = preprocess_data("PM25-air-pollution.csv", ',')
+    data_gdp = preprocess_data("country_gdp_per_capita.csv", ',')
 
-    return data_co2, data_world_population, data_pm_25
+    return data_co2, data_world_population, data_pm_25, data_gdp
 
 if __name__ == "__main__":
     download()

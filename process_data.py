@@ -4,7 +4,7 @@ import pandas as pd
 
 def fill_missing_population(country: str):
     # Read the world population data from the CSV file
-    _, population_df, _ = get_preprocessed_data()
+    _, population_df, _, _ = get_preprocessed_data()
 
     # Filter data for the specified country
     country_data = population_df[population_df['CCA3'] == country]
@@ -39,7 +39,7 @@ def fill_missing_population(country: str):
 
 
 def fill_missing_pm25(country: str):
-    _, _, pm25_df = get_preprocessed_data()
+    _, _, pm25_df, _ = get_preprocessed_data()
 
     country_data = pm25_df[pm25_df['Code'] == country]
 
@@ -70,7 +70,7 @@ def fill_missing_pm25(country: str):
 
 
 def fill_missing_co2(country: str):
-    co2_df, _, _ = get_preprocessed_data()
+    co2_df, _, _, _ = get_preprocessed_data()
 
     country_data = co2_df[co2_df['country_code'] == country]
 
@@ -84,7 +84,7 @@ def fill_missing_co2(country: str):
     return co2
 
 def get_processed_data():
-    co2_df, population_df, pm25_df = get_preprocessed_data()
+    co2_df, population_df, pm25_df, gdp_df = get_preprocessed_data()
 
     # All countries and years considered
     countries = population_df['Country/Territory'].values
@@ -96,14 +96,17 @@ def get_processed_data():
 
     for index, country in enumerate(countries):
         country_symbol = country_symbols[index]
-        if pm25_df[pm25_df['Code'] == country_symbol].empty or co2_df[co2_df['country_code'] == country_symbol].empty:
+        if (pm25_df[pm25_df['Code'] == country_symbol].empty
+                or co2_df[co2_df['country_code'] == country_symbol].empty
+                or country not in gdp_df.index):
             continue
 
         population = fill_missing_population(country_symbol)[:-3] # 2020-3=2017
         pollution = fill_missing_pm25(country_symbol)
         co2 = fill_missing_co2(country_symbol)[:-2] # 2020-3=2017
+        gdp = gdp_df[gdp_df.index == country]['GDP'].values[0]
 
-        data_for_country = {'Country': country, 'Code': country_symbol, 'Year': years, 'Population': population, 'Pollution': pollution, 'CO2': co2}
+        data_for_country = {'Country': country, 'Code': country_symbol, 'Year': years, 'Population': population, 'Pollution': pollution, 'CO2': co2, 'GDP': gdp}
         country_years_populations_pollutions_co2.append(data_for_country)
 
     # Creating a dataframe with the data from the dictionary above
@@ -112,13 +115,15 @@ def get_processed_data():
     for cell in country_years_populations_pollutions_co2:
         country_cloned = [cell['Country']] * len(years)
         code_cloned = [cell['Code']] * len(years)
+        gdp_cloned = [cell['GDP']] * len(years)
         data = {
             'Country': country_cloned,
             'Code': code_cloned,
             'Year': cell['Year'],
             'Population': cell['Population'],
             'Pollution': cell['Pollution'],
-            'CO2': cell['CO2']
+            'CO2': cell['CO2'],
+            'GDP': gdp_cloned
         }
         df = pd.DataFrame(data)
         dataframes.append(df)
