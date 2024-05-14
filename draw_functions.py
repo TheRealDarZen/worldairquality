@@ -104,9 +104,40 @@ def co2_pollution_function(year):
     plt.show()
 
 
+def gdp_avg_pollution_function():
+    _, data_df = get_processed_data()
+
+    gdp_arr = []
+    avg_pollution_arr = []
+    countries = list(set(data_df['Country'].values))
+
+    for country in countries:
+        country_data = data_df[data_df['Country'] == country]
+        gdp = country_data['GDP'].values[0]
+        avg_pollution = sum(country_data['Pollution'].values) / len(country_data['Pollution'])
+
+        gdp_arr.append(gdp)
+        avg_pollution_arr.append(avg_pollution)
+
+    z = np.polyfit(gdp_arr, avg_pollution_arr, 1)
+    trendline = np.poly1d(z)
+
+    plt.scatter(gdp_arr, avg_pollution_arr, marker='.')
+    plt.plot(gdp_arr, trendline(gdp_arr), color='red')
+
+    plt.xlabel('GDP')
+    plt.ylabel('Avg Pollution')
+    plt.title('GDP vs Avg Pollution')
+
+    plt.grid(True)
+    plt.show()
+
+
+
 if __name__ == "__main__":
     #draw_population_pollution_year_function('Algeria', get_processed_data()[1])
     #get_processed_data()
     #population_pollution_function(1990)
     #draw_population_pollution_year_plane(get_processed_data()[1])
-    co2_pollution_function(1990)
+    #co2_pollution_function(2015)
+    gdp_avg_pollution_function()
