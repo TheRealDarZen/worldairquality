@@ -10,11 +10,11 @@ from process_data import get_processed_data
 def model(df):
 
     # Selecting features and target variable
-    X = df[['Population', 'CO2', 'GDP', 'Vehicles', 'VPC']]
+    X = df[['Population', 'CO2', 'GDP', 'Vehicles']]
     y = df['Pollution']
 
     # Splitting the data into training and testing sets
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.05, random_state=42)
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
    # Creating and training the linear regression model
     model = LinearRegression()
@@ -44,6 +44,7 @@ def model(df):
     plt.ylabel('Residuals')
     plt.title('Residual Plot')
     plt.axhline(y=0, color='r', linestyle='--')  # Adding a horizontal line at y=0
+    plt.savefig('ResidualPlot.png')
     plt.show()
 
 
