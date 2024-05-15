@@ -1,25 +1,30 @@
 import pandas as pd
 from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import PolynomialFeatures
 from sklearn.linear_model import LinearRegression
 from sklearn.metrics import mean_squared_error
-from process_data import get_processed_data
 import matplotlib.pyplot as plt
+from process_data import get_processed_data
+
 
 def model(df):
 
     # Selecting features and target variable
-    X = df[['Population', 'CO2', 'GDP', 'Vehicles']]
+    X = df[['Population', 'CO2', 'GDP', 'Vehicles', 'VPC']]
     y = df['Pollution']
 
     # Splitting the data into training and testing sets
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.05, random_state=42)
 
-    # Creating and training the linear regression model
+   # Creating and training the linear regression model
     model = LinearRegression()
     model.fit(X_train, y_train)
 
     # Making predictions
     y_pred = model.predict(X_test)
+
+    '''for pred, test in zip(y_pred, y_test):
+        print(f'Prediction: {pred}, Actual: {test}')'''
 
     # Evaluating the model
     mse = mean_squared_error(y_test, y_pred)
