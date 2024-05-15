@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 def model(df):
 
     # Selecting features and target variable
-    X = df[['Population', 'CO2', 'GDP']]
+    X = df[['Population', 'CO2', 'GDP', 'Vehicles']]
     y = df['Pollution']
 
     # Splitting the data into training and testing sets
