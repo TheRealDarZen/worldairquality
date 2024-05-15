@@ -17,7 +17,8 @@ file_names = ["openaq.csv", "world_population.csv", "AQI and Lat Long of Countri
 dataset_paths = ["mexwell/world-air-quality", "iamsouravbanerjee/world-population-dataset",
                  "adityaramachandran27/world-air-quality-index-by-city-and-coordinates",
                  "koustavghosh149/co2-emission-around-the-world", "programmerrdai/outdoor-air-pollution"]
-url = "https://en.wikipedia.org/wiki/List_of_countries_by_GDP_(nominal)_per_capita"
+url_gdp = "https://en.wikipedia.org/wiki/List_of_countries_by_GDP_(nominal)_per_capita"
+url_vehicles = "https://en.wikipedia.org/wiki/List_of_countries_and_territories_by_motor_vehicles_per_capita"
 
 #Data dowlnoad using API
 def download():
@@ -31,11 +32,13 @@ def download():
             print(f"File {file_name} already exists.")
 
     # Wikipedia
+
+    # GDP
     csv_file = "country_gdp_per_capita.csv"
     if not os.path.isfile(csv_file):
         print(f"Started downloading {csv_file} from wikipedia.com...")
 
-        response = requests.get(url)
+        response = requests.get(url_gdp)
         soup = BeautifulSoup(response.content, "html.parser")
         gdp_table = soup.find("table", class_="wikitable")
 
@@ -68,15 +71,50 @@ def download():
     else:
         print(f"File {csv_file} already exists.")
 
+    # Motor vehicles
+    csv_file = "country_motor_vehicles.csv"
+    if not os.path.isfile(csv_file):
+        print(f"Started downloading {csv_file} from wikipedia.com...")
+
+        response = requests.get(url_vehicles)
+        soup = BeautifulSoup(response.content, "html.parser")
+        vehicles_table = soup.find("table", class_="wikitable")
+
+        countries = []
+        vehicles = []
+
+        for row in vehicles_table.find_all("tr"):
+            cells = row.find_all("td")
+            if len(cells) > 0:
+                countries.append(cells[0].text.strip())
+                vehicles.append(str_to_num(cells[2].text.strip()))
+
+        data = zip(countries, vehicles)
+
+        with open(csv_file, mode='w', newline='', encoding='utf-8') as file:
+            writer = csv.writer(file)
+            writer.writerow(['Country', 'Motor Vehicles'])
+            writer.writerows(data)
+
+        print("Download completed successfully.")
+
+    else:
+        print(f"File {csv_file} already exists.")
+
 
 def str_to_num(item: str) -> int or None:
     if item == '—':
         return None
 
+    item = item.split('[')[0]
+    item = item.split(' ')[0]
+
     parts = item.split(',')
     if len(parts) == 1:
         return int(parts[0])
-    return int(parts[0]) * 1000 + int(parts[1])
+    elif len(parts) == 2:
+        return int(parts[0]) * 1000 + int(parts[1])
+    return int(parts[0]) * 1000000 + int(parts[1]) * 1000 + int(parts[2])
 
 
 #Preprocess data
