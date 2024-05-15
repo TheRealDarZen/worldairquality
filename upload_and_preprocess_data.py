@@ -123,8 +123,9 @@ def get_preprocessed_data():
     data_world_population = preprocess_data("world_population.csv", ',')
     data_pm_25 = preprocess_data("PM25-air-pollution.csv", ',')
     data_gdp = preprocess_data("country_gdp_per_capita.csv", ',')
+    data_vehicles = preprocess_data("country_motor_vehicles.csv", ',')
 
-    return data_co2, data_world_population, data_pm_25, data_gdp
+    return data_co2, data_world_population, data_pm_25, data_gdp, data_vehicles
 
 if __name__ == "__main__":
     download()
