@@ -106,10 +106,11 @@ def get_processed_data():
         co2 = fill_missing_co2(country_symbol)[:-2] # 2020-3=2017
         gdp = gdp_df[gdp_df.index == country]['GDP'].values[0]
         vehicles = vehicles_df[vehicles_df.index == country]['Motor Vehicles'].values[0]
+        vehicles_per_capita = [vehicles / el for el in population]
 
         data_for_country = {'Country': country, 'Code': country_symbol, 'Year': years,
                             'Population': population, 'Pollution': pollution, 'CO2': co2,
-                            'GDP': gdp, 'Vehicles': vehicles}
+                            'GDP': gdp, 'Vehicles': vehicles, 'VPC': vehicles_per_capita}
         country_years_populations_pollutions_co2.append(data_for_country)
 
     # Creating a dataframe with the data from the dictionary above
@@ -128,7 +129,8 @@ def get_processed_data():
             'Pollution': cell['Pollution'],
             'CO2': cell['CO2'],
             'GDP': gdp_cloned,
-            'Vehicles': vehicles_cloned
+            'Vehicles': vehicles_cloned,
+            'VPC': cell['VPC']
         }
         df = pd.DataFrame(data)
         dataframes.append(df)
