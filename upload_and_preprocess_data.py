@@ -19,6 +19,7 @@ dataset_paths = ["mexwell/world-air-quality", "iamsouravbanerjee/world-populatio
                  "koustavghosh149/co2-emission-around-the-world", "programmerrdai/outdoor-air-pollution"]
 url_gdp = "https://en.wikipedia.org/wiki/List_of_countries_by_GDP_(nominal)_per_capita"
 url_vehicles = "https://en.wikipedia.org/wiki/List_of_countries_and_territories_by_motor_vehicles_per_capita"
+url_area = "https://en.wikipedia.org/wiki/List_of_countries_and_dependencies_by_area"
 
 #Data dowlnoad using API
 def download():
@@ -101,8 +102,38 @@ def download():
     else:
         print(f"File {csv_file} already exists.")
 
+    # Area
+    csv_file = "country_area.csv"
+    if not os.path.isfile(csv_file):
+        print(f"Started downloading {csv_file} from wikipedia.com...")
 
-def str_to_num(item: str) -> int or None:
+        response = requests.get(url_area)
+        soup = BeautifulSoup(response.content, "html.parser")
+        area_table = soup.find("table", class_="wikitable")
+
+        countries = []
+        areas = []
+
+        for row in area_table.find_all("tr"):
+            cells = row.find_all("td")
+            if len(cells) > 0:
+                countries.append(cells[1].text.strip())
+                areas.append(str_to_num(cells[2].text.strip()))
+
+        data = zip(countries, areas)
+
+        with open(csv_file, mode='w', newline='', encoding='utf-8') as file:
+            writer = csv.writer(file)
+            writer.writerow(['Country', 'Area'])
+            writer.writerows(data)
+
+        print("Download completed successfully.")
+
+    else:
+        print(f"File {csv_file} already exists.")
+
+
+def str_to_num(item: str) -> float or None:
     if item == '—':
         return None
 
@@ -111,10 +142,10 @@ def str_to_num(item: str) -> int or None:
 
     parts = item.split(',')
     if len(parts) == 1:
-        return int(parts[0])
+        return float(parts[0])
     elif len(parts) == 2:
-        return int(parts[0]) * 1000 + int(parts[1])
-    return int(parts[0]) * 1000000 + int(parts[1]) * 1000 + int(parts[2])
+        return float(parts[0]) * 1000 + float(parts[1])
+    return float(parts[0]) * 1000000 + float(parts[1]) * 1000 + float(parts[2])
 
 
 #Preprocess data
@@ -124,8 +155,9 @@ def get_preprocessed_data():
     data_pm_25 = preprocess_data("PM25-air-pollution.csv", ',')
     data_gdp = preprocess_data("country_gdp_per_capita.csv", ',')
     data_vehicles = preprocess_data("country_motor_vehicles.csv", ',')
+    data_area = preprocess_data("country_area.csv", ',')
 
-    return data_co2, data_world_population, data_pm_25, data_gdp, data_vehicles
+    return data_co2, data_world_population, data_pm_25, data_gdp, data_vehicles, data_area
 
 if __name__ == "__main__":
     download()

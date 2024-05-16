@@ -84,7 +84,7 @@ def fill_missing_co2(country: str):
     return co2
 
 def get_processed_data():
-    co2_df, population_df, pm25_df, gdp_df, vehicles_df = get_preprocessed_data()
+    co2_df, population_df, pm25_df, gdp_df, vehicles_df, area_df = get_preprocessed_data()
 
     # All countries and years considered
     countries = population_df['Country/Territory'].values
@@ -98,7 +98,8 @@ def get_processed_data():
         country_symbol = country_symbols[index]
         if (pm25_df[pm25_df['Code'] == country_symbol].empty
                 or co2_df[co2_df['country_code'] == country_symbol].empty
-                or country not in gdp_df.index or country not in vehicles_df.index):
+                or country not in gdp_df.index or country not in vehicles_df.index
+                or country not in area_df.index):
             continue
 
         population = fill_missing_population(country_symbol)[:-3] # 2020-3=2017
@@ -107,10 +108,12 @@ def get_processed_data():
         gdp = gdp_df[gdp_df.index == country]['GDP'].values[0]
         vehicles = vehicles_df[vehicles_df.index == country]['Motor Vehicles'].values[0]
         vehicles_per_capita = [vehicles / el for el in population]
+        area = area_df[area_df.index == country]['Area'].values[0]
 
         data_for_country = {'Country': country, 'Code': country_symbol, 'Year': years,
                             'Population': population, 'Pollution': pollution, 'CO2': co2,
-                            'GDP': gdp, 'Vehicles': vehicles, 'VPC': vehicles_per_capita}
+                            'GDP': gdp, 'Vehicles': vehicles, 'VPC': vehicles_per_capita,
+                            'Area': area}
         country_years_populations_pollutions_co2.append(data_for_country)
 
     # Creating a dataframe with the data from the dictionary above
@@ -121,6 +124,7 @@ def get_processed_data():
         code_cloned = [cell['Code']] * len(years)
         gdp_cloned = [cell['GDP']] * len(years)
         vehicles_cloned = [cell['Vehicles']] * len(years)
+        area_cloned = [cell['Area']] * len(years)
         data = {
             'Country': country_cloned,
             'Code': code_cloned,
@@ -130,7 +134,8 @@ def get_processed_data():
             'CO2': cell['CO2'],
             'GDP': gdp_cloned,
             'Vehicles': vehicles_cloned,
-            'VPC': cell['VPC']
+            'VPC': cell['VPC'],
+            'Area': cell['Area']
         }
         df = pd.DataFrame(data)
         dataframes.append(df)
