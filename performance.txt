@@ -1,0 +1,9 @@
+Neural Network - Mean Absolute Error: 4.463869042494863
+Neural Network - Mean Squared Error: 44.381364281765826
+Neural Network - R2 Score: 0.8561589435722222
+Linear Regression - Mean Absolute Error: 9.708893087800012
+Linear Regression - Mean Squared Error: 206.10542179037637
+Linear Regression - R2 Score: 0.33200742956879403
+Random Forest - Mean Absolute Error: 0.6781001721493567
+Random Forest - Mean Squared Error: 2.8051916338895153
+Random Forest - R2 Score: 0.9909083072449214

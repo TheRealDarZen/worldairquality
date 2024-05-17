@@ -5,6 +5,7 @@ from sklearn.metrics import mean_squared_error, mean_absolute_error
 import matplotlib.pyplot as plt
 from process_data import get_processed_data
 from grid_search import best_parameters
+from sklearn.metrics import r2_score
 
 
 def random_forest_model(df, draw_plot=False):
@@ -33,6 +34,8 @@ def random_forest_model(df, draw_plot=False):
     print("Random Forest - Mean Absolute Error:", mae)
     mse = mean_squared_error(y_test, y_pred)
     print("Random Forest - Mean Squared Error:", mse)
+    r2 = r2_score(y_test, y_pred)
+    print("Random Forest - R2 Score:", r2)
 
     # Calculating residuals
     residuals = y_test - y_pred

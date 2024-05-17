@@ -11,6 +11,6 @@ import draw_functions as fmddf
 
 if __name__ == "__main__":
     data_df = get_processed_data()[1]
-    neural_network_model(data_df)
-    linear_regression_model(data_df)
-    random_forest_model(data_df)
+    neural_network_model(data_df, True)
+    linear_regression_model(data_df, True)
+    random_forest_model(data_df, True)

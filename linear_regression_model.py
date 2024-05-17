@@ -5,6 +5,7 @@ from sklearn.linear_model import LinearRegression
 from sklearn.metrics import mean_squared_error, mean_absolute_error
 import matplotlib.pyplot as plt
 from process_data import get_processed_data
+from sklearn.metrics import r2_score
 
 
 def linear_regression_model(df, draw_plot=False):
@@ -23,9 +24,8 @@ def linear_regression_model(df, draw_plot=False):
     print("Linear Regression - Mean Absolute Error:", mae)
     mse = mean_squared_error(y_test, y_pred)
     print("Linear Regression - Mean Squared Error:", mse)
-
-    print("Coefficients:", model.coef_)
-    print("Intercept:", model.intercept_)
+    r2 = r2_score(y_test, y_pred)
+    print("Linear Regression - R2 Score:", r2)
 
     residuals = y_test - y_pred
 

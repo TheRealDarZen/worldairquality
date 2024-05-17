@@ -9,6 +9,7 @@ from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense
 from process_data import get_processed_data
 from grid_search import best_parameters
+from sklearn.metrics import r2_score
 
 
 def create_model(activation_func='relu'):
@@ -49,6 +50,8 @@ def neural_network_model(df, draw_plot=False):
     print("Neural Network - Mean Absolute Error:", mae)
     mse = mean_squared_error(y_test, y_pred)
     print("Neural Network - Mean Squared Error:", mse)
+    r2 = r2_score(y_test, y_pred)
+    print("Neural Network - R2 Score:", r2)
 
     residuals = y_test - y_pred.flatten()
 
