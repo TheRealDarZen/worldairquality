@@ -7,7 +7,7 @@ from process_data import get_processed_data
 from grid_search import best_parameters
 
 
-def random_forest_model(df):
+def random_forest_model(df, draw_plot=False):
 
     # Selecting features and target variable
     X = df[['Population', 'CO2', 'GDP', 'Vehicles', 'VPC', 'Area']]
@@ -37,15 +37,16 @@ def random_forest_model(df):
     # Calculating residuals
     residuals = y_test - y_pred
 
-    # Plotting residuals
-    plt.figure(figsize=(10, 6))
-    plt.scatter(y_pred, residuals, alpha=0.5)
-    plt.xlabel('Predicted Pollution')
-    plt.ylabel('Residuals')
-    plt.title('Random Forest Residual Plot')
-    plt.axhline(y=0, color='r', linestyle='--')  # Adding a horizontal line at y=0
-    plt.savefig('RandomForestResidualPlot.png')
-    plt.show()
+    if draw_plot:
+        # Plotting residuals
+        plt.figure(figsize=(10, 6))
+        plt.scatter(y_pred, residuals, alpha=0.5)
+        plt.xlabel('Predicted Pollution')
+        plt.ylabel('Residuals')
+        plt.title('Random Forest Residual Plot')
+        plt.axhline(y=0, color='r', linestyle='--')  # Adding a horizontal line at y=0
+        plt.savefig('RandomForestResidualPlot.png')
+        plt.show()
 
 
 if __name__ == "__main__":

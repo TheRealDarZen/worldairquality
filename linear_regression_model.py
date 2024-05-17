@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 from process_data import get_processed_data
 
 
-def model(df):
+def linear_regression_model(df, draw_plot=False):
 
     X = df[['Population', 'CO2', 'GDP', 'Vehicles', 'VPC', 'Area']]
     y = df['Pollution']
@@ -29,15 +29,16 @@ def model(df):
 
     residuals = y_test - y_pred
 
-    plt.figure(figsize=(10, 6))
-    plt.scatter(y_pred, residuals, alpha=0.5)
-    plt.xlabel('Predicted Pollution')
-    plt.ylabel('Residuals')
-    plt.title('Linear Regression Residual Plot')
-    plt.axhline(y=0, color='r', linestyle='--')  # Adding a horizontal line at y=0
-    plt.savefig('LinearRegressionResidualPlot.png')
-    plt.show()
+    if draw_plot:
+        plt.figure(figsize=(10, 6))
+        plt.scatter(y_pred, residuals, alpha=0.5)
+        plt.xlabel('Predicted Pollution')
+        plt.ylabel('Residuals')
+        plt.title('Linear Regression Residual Plot')
+        plt.axhline(y=0, color='r', linestyle='--')  # Adding a horizontal line at y=0
+        plt.savefig('LinearRegressionResidualPlot.png')
+        plt.show()
 
 
 if __name__ == "__main__":
-    model(get_processed_data()[1])
+    linear_regression_model(get_processed_data()[1])

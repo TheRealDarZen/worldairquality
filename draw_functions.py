@@ -135,9 +135,9 @@ def gdp_avg_pollution_function():
 
 
 if __name__ == "__main__":
-    #draw_population_pollution_year_function('Algeria', get_processed_data()[1])
+    draw_population_pollution_year_function('China', get_processed_data()[1])
     #get_processed_data()
     #population_pollution_function(1990)
     #draw_population_pollution_year_plane(get_processed_data()[1])
     #co2_pollution_function(2015)
-    gdp_avg_pollution_function()
+    #gdp_avg_pollution_function()
