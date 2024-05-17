@@ -4,6 +4,7 @@ from sklearn.ensemble import RandomForestRegressor
 from sklearn.metrics import mean_squared_error, mean_absolute_error
 import matplotlib.pyplot as plt
 from process_data import get_processed_data
+from grid_search import best_parameters
 
 
 def random_forest_model(df):
@@ -16,11 +17,16 @@ def random_forest_model(df):
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.1, random_state=42)
 
     # Creating and training the Random Forest regression model
-    model = RandomForestRegressor(n_estimators=1000, n_jobs=-1, random_state=42)
-    model.fit(X_train, y_train)
+    model = RandomForestRegressor(n_jobs=-1, random_state=42)
+
+    parameters_grid = {
+        'n_estimators': [100, 200, 300, 400, 500]
+    }
+
+    best_model = best_parameters(model, parameters_grid, X_train, y_train)
 
     # Making predictions
-    y_pred = model.predict(X_test)
+    y_pred = best_model.predict(X_test)
 
     # Evaluating the model
     mae = mean_absolute_error(y_test, y_pred)

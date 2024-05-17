@@ -9,37 +9,26 @@ from process_data import get_processed_data
 
 def model(df):
 
-    # Selecting features and target variable
     X = df[['Population', 'CO2', 'GDP', 'Vehicles', 'VPC', 'Area']]
     y = df['Pollution']
 
-    # Splitting the data into training and testing sets
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.1, random_state=42)
 
-   # Creating and training the linear regression model
     model = LinearRegression(n_jobs=-1)
     model.fit(X_train, y_train)
 
-    # Making predictions
     y_pred = model.predict(X_test)
 
-    '''for pred, test in zip(y_pred, y_test):
-        print(f'Prediction: {pred}, Actual: {test}')'''
-
-    # Evaluating the model
     mae = mean_absolute_error(y_test, y_pred)
     print("Linear Regression - Mean Absolute Error:", mae)
     mse = mean_squared_error(y_test, y_pred)
     print("Linear Regression - Mean Squared Error:", mse)
 
-    # Coefficients and intercept
     print("Coefficients:", model.coef_)
     print("Intercept:", model.intercept_)
 
-    # Calculating residuals
     residuals = y_test - y_pred
 
-    # Plotting residuals
     plt.figure(figsize=(10, 6))
     plt.scatter(y_pred, residuals, alpha=0.5)
     plt.xlabel('Predicted Pollution')
