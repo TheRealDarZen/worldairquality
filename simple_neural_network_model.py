@@ -8,6 +8,7 @@ import tensorflow as tf
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense
 from process_data import get_processed_data
+from grid_search import best_parameters
 
 def neural_network_model(df):
 
@@ -31,6 +32,12 @@ def neural_network_model(df):
     # Training the model
     history = model.fit(X_train, y_train, epochs=100, batch_size=10, validation_split=0.1, verbose=1)
 
+    '''parameters_grid = {
+        'epochs': [10, 20, 30, 40, 50, 60, 70, 80, 90, 100],
+        'batch_size': [8, 16, 32, 64, 128, 256, 512]
+    }
+
+    best_model = best_parameters(model, parameters_grid, X_train, y_train)'''
 
     # Making predictions
     y_pred = model.predict(X_test)
