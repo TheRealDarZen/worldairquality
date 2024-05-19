@@ -38,6 +38,16 @@ def draw_plots(df):
                  'AreaPollution2010', 'Area (km^2)', 'Pollution')
     draw_2d_plot(data_2010['VPC'], data_2010['Pollution'],
                  'VPCPollution2010', 'Vehicles per capita', 'Pollution')
+    # 2015
+    data_2015 = df[df['Year'] == 2015]
+    draw_2d_plot(data_2015['Population'], data_2015['Pollution'],
+                 'PopulationPollution2015', 'Population', 'Pollution')
+    draw_2d_plot(data_2015['CO2'], data_2015['Pollution'],
+                 'CO2Pollution2015', 'CO2 (metric tons per capita)', 'Pollution')
+    draw_2d_plot(data_2015['Area'], data_2015['Pollution'],
+                 'AreaPollution2015', 'Area (km^2)', 'Pollution')
+    draw_2d_plot(data_2015['VPC'], data_2015['Pollution'],
+                 'VPCPollution2015', 'Vehicles per capita', 'Pollution')
     # Other
     gdp_avg_pollution_function(df)
     vehicles_avg_pollution_function(df)
