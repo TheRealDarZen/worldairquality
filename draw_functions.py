@@ -74,6 +74,8 @@ def draw_2d_plot(dataX, dataY, name: str, Xname: str, Yname: str):
 
     plt.savefig(f'{name}.png')
     #plt.show()
+
+
 def draw_population_pollution_year_function(country: str, data_df):
     # Filtering data
     country_data = data_df[data_df['Country'] == country]
@@ -97,50 +99,6 @@ def draw_population_pollution_year_function(country: str, data_df):
 
     plt.savefig('PopulationPollutionYear.png')
 
-    plt.show()
-
-
-def population_pollution_function(year):
-    _, data_df = get_processed_data()
-
-    year_data = data_df[data_df['Year'] == year]
-
-    population = year_data['Population']
-    pollution = year_data['Pollution']
-
-    z = np.polyfit(population, pollution, 1)
-    trendline = np.poly1d(z)
-
-    plt.scatter(population, pollution, marker='.')
-    plt.plot(population, trendline(population), color='red')
-
-    plt.xlabel('Population')
-    plt.ylabel('Pollution')
-    plt.title('Population vs Pollution')
-
-    plt.grid(True)
-    plt.show()
-
-
-def co2_pollution_function(year):
-    _, data_df = get_processed_data()
-
-    year_data = data_df[data_df['Year'] == year]
-
-    co2 = year_data['CO2']
-    pollution = year_data['Pollution']
-
-    z = np.polyfit(co2, pollution, 1)
-    trendline = np.poly1d(z)
-
-    plt.scatter(co2, pollution, marker='.')
-    plt.plot(co2, trendline(co2), color='red')
-
-    plt.xlabel('CO2')
-    plt.ylabel('Pollution')
-    plt.title('CO2 vs Pollution')
-
-    plt.grid(True)
     plt.show()
 
 
