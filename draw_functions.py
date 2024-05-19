@@ -230,4 +230,4 @@ if __name__ == "__main__":
     #draw_population_pollution_year_plane(data_df)
     #co2_pollution_function(2015)
     #gdp_avg_pollution_function()
-    #draw_plots(data_df)
+    draw_plots(data_df)
