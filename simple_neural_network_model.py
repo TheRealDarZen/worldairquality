@@ -23,16 +23,18 @@ def create_model(activation_func='relu'):
 
     return model
 def neural_network_model(df, draw_plot=False):
-
+    # Extracting data
     X = df[['Population', 'CO2', 'GDP', 'Vehicles', 'VPC', 'Area']]
     y = df['Pollution']
 
+    # Creating training and test databases
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.1, random_state=42)
 
     scaler = StandardScaler()
     X_train = scaler.fit_transform(X_train)
     X_test = scaler.transform(X_test)
 
+    # Creating a model
     model = create_model()
 
     history = model.fit(X_train, y_train, epochs=500, batch_size=32, validation_split=0.1, verbose=0)
@@ -46,6 +48,7 @@ def neural_network_model(df, draw_plot=False):
 
     y_pred = model.predict(X_test)
 
+    # Printing results
     mae = mean_absolute_error(y_test, y_pred)
     print("Neural Network - Mean Absolute Error:", mae)
     mse = mean_squared_error(y_test, y_pred)
@@ -55,6 +58,7 @@ def neural_network_model(df, draw_plot=False):
 
     residuals = y_test - y_pred.flatten()
 
+    # Drawing plots
     if draw_plot:
         plt.figure(figsize=(10, 6))
         plt.scatter(y_pred, residuals, alpha=0.5)

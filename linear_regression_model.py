@@ -10,16 +10,20 @@ from sklearn.metrics import r2_score
 
 def linear_regression_model(df, draw_plot=False):
 
+    # Extracting data
     X = df[['Population', 'CO2', 'GDP', 'Vehicles', 'VPC', 'Area']]
     y = df['Pollution']
 
+    # Creating training and test databases
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.1, random_state=42)
 
+    # Creating a model
     model = LinearRegression(n_jobs=-1)
     model.fit(X_train, y_train)
 
     y_pred = model.predict(X_test)
 
+    # Printing results
     mae = mean_absolute_error(y_test, y_pred)
     print("Linear Regression - Mean Absolute Error:", mae)
     mse = mean_squared_error(y_test, y_pred)
@@ -31,6 +35,7 @@ def linear_regression_model(df, draw_plot=False):
 
     residuals = y_test - y_pred
 
+    # Drawing a plot
     if draw_plot:
         plt.figure(figsize=(10, 6))
         plt.scatter(y_pred, residuals, alpha=0.5)

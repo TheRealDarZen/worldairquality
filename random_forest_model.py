@@ -9,14 +9,16 @@ from sklearn.metrics import r2_score
 
 
 def random_forest_model(df, draw_plot=False):
-
+    # Extracting data
     X = df[['Population', 'CO2', 'GDP', 'Vehicles', 'VPC', 'Area']]
     y = df['Pollution']
 
+    # Creating training and test databases
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.1, random_state=42)
 
     model = RandomForestRegressor(n_jobs=-1, random_state=42)
 
+    # Creating a model and choosing best parameters
     parameters_grid = {
         'n_estimators': [100, 200, 300, 400, 500]
     }
@@ -25,6 +27,7 @@ def random_forest_model(df, draw_plot=False):
 
     y_pred = best_model.predict(X_test)
 
+    # Printing results
     mae = mean_absolute_error(y_test, y_pred)
     print("Random Forest - Mean Absolute Error:", mae)
     mse = mean_squared_error(y_test, y_pred)
@@ -34,6 +37,7 @@ def random_forest_model(df, draw_plot=False):
 
     residuals = y_test - y_pred
 
+    # Drawing a plot
     if draw_plot:
         plt.figure(figsize=(10, 6))
         plt.scatter(y_pred, residuals, alpha=0.5)

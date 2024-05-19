@@ -8,16 +8,18 @@ from process_data import get_processed_data
 from grid_search import best_parameters
 
 def svr_model(df, draw_plot=False):
-
+    # Extracting data
     X = df[['Population', 'CO2', 'GDP', 'Vehicles', 'VPC', 'Area']]
     y = df['Pollution']
 
+    # Creating training and test databases
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.1, random_state=42)
 
     scaler = StandardScaler()
     X_train = scaler.fit_transform(X_train)
     X_test = scaler.transform(X_test)
 
+    # Creating a model and choosing best parameters
     parameters_grid = {
         'C': [0.1, 1, 10, 100, 1000],
         'kernel': ['rbf'],
@@ -30,6 +32,7 @@ def svr_model(df, draw_plot=False):
 
     y_pred = best_model.predict(X_test)
 
+    # Printing results
     mae = mean_absolute_error(y_test, y_pred)
     mse = mean_squared_error(y_test, y_pred)
     r2 = r2_score(y_test, y_pred)
@@ -40,6 +43,7 @@ def svr_model(df, draw_plot=False):
 
     residuals = y_test - y_pred
 
+    # Drawing a plot
     if draw_plot:
         plt.figure(figsize=(10, 6))
         plt.scatter(y_pred, residuals, alpha=0.5)

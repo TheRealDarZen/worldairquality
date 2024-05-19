@@ -55,9 +55,11 @@ def draw_plots(df):
 
 def draw_2d_plot(dataX, dataY, name: str, Xname: str, Yname: str):
 
+    # Creating trendline
     z = np.polyfit(dataX, dataY, 1)
     trendline = np.poly1d(z)
 
+    # Creating a plot
     fig, ax = plt.subplots()
     ax.scatter(dataX, dataY, marker='.')
     ax.plot(dataX, trendline(dataX), color='red')
@@ -67,6 +69,7 @@ def draw_2d_plot(dataX, dataY, name: str, Xname: str, Yname: str):
     ax.set_title(f'{Xname} vs {Yname}')
     ax.grid(True)
 
+    #Focusing on 92.5% of data to avoid anomalies
     x_min, x_max = np.percentile(dataX, [2.5, 95.0])
     y_min, y_max = np.percentile(dataY, [2.5, 95.0])
     ax.set_xlim(x_min, x_max)
