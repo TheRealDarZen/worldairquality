@@ -26,6 +26,8 @@ def linear_regression_model(df, draw_plot=False):
     print("Linear Regression - Mean Squared Error:", mse)
     r2 = r2_score(y_test, y_pred)
     print("Linear Regression - R2 Score:", r2)
+    print("Linear Regression - Coefficients:", model.coef_)
+    print("Linear Regression - Intercept:", model.intercept_)
 
     residuals = y_test - y_pred
 
@@ -35,7 +37,7 @@ def linear_regression_model(df, draw_plot=False):
         plt.xlabel('Predicted Pollution')
         plt.ylabel('Residuals')
         plt.title('Linear Regression Residual Plot')
-        plt.axhline(y=0, color='r', linestyle='--')  # Adding a horizontal line at y=0
+        plt.axhline(y=0, color='r', linestyle='--')
         plt.savefig('LinearRegressionResidualPlot.png')
         plt.show()
 

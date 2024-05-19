@@ -4,6 +4,12 @@ Neural Network - R2 Score: 0.8561589435722222
 Linear Regression - Mean Absolute Error: 9.708893087800012
 Linear Regression - Mean Squared Error: 206.10542179037637
 Linear Regression - R2 Score: 0.33200742956879403
+Linear Regression - Coefficients: [ 6.48082777e-08  1.42402221e+00 -2.96190904e-04 -1.27078226e-07
+ -1.23752762e+01 -7.71711751e-07]
+Linear Regression - Intercept: 31.35706074952411
 Random Forest - Mean Absolute Error: 0.6781001721493567
 Random Forest - Mean Squared Error: 2.8051916338895153
 Random Forest - R2 Score: 0.9909083072449214
+SVM - Mean Absolute Error: 2.413290442652552
+SVM - Mean Squared Error: 26.386026510106557
+SVM - R2 Score: 0.914482260976722
