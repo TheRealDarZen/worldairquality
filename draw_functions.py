@@ -91,9 +91,11 @@ def draw_population_pollution_year_function(country: str, data_df):
     ax.plot(population, pollution, years, marker='.')
 
     ax.set_xlabel('Population')
-    ax.set_ylabel('PM2.5 air pollution, mean annual exposure (micrograms per cubic meter)')
+    ax.set_ylabel('Pollution (micrograms per cubic meter)')
     ax.set_zlabel('Year')
     ax.set_title(f'{country_data['Country'].values[0]}')
+
+    plt.savefig('PopulationPollutionYear.png')
 
     plt.show()
 
@@ -222,10 +224,10 @@ def vehicles_avg_pollution_function(df):
 
 if __name__ == "__main__":
     data_df = get_processed_data()[1]
-    #draw_population_pollution_year_function('China', get_processed_data()[1])
+    draw_population_pollution_year_function('Ukraine', data_df)
     #get_processed_data()
     #population_pollution_function(1990)
-    #draw_population_pollution_year_plane(get_processed_data()[1])
+    #draw_population_pollution_year_plane(data_df)
     #co2_pollution_function(2015)
     #gdp_avg_pollution_function()
-    draw_plots(data_df)
+    #draw_plots(data_df)
