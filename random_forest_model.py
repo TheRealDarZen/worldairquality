@@ -10,14 +10,11 @@ from sklearn.metrics import r2_score
 
 def random_forest_model(df, draw_plot=False):
 
-    # Selecting features and target variable
     X = df[['Population', 'CO2', 'GDP', 'Vehicles', 'VPC', 'Area']]
     y = df['Pollution']
 
-    # Splitting the data into training and testing sets
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.1, random_state=42)
 
-    # Creating and training the Random Forest regression model
     model = RandomForestRegressor(n_jobs=-1, random_state=42)
 
     parameters_grid = {
@@ -26,10 +23,8 @@ def random_forest_model(df, draw_plot=False):
 
     best_model = best_parameters(model, parameters_grid, X_train, y_train)
 
-    # Making predictions
     y_pred = best_model.predict(X_test)
 
-    # Evaluating the model
     mae = mean_absolute_error(y_test, y_pred)
     print("Random Forest - Mean Absolute Error:", mae)
     mse = mean_squared_error(y_test, y_pred)
@@ -37,17 +32,15 @@ def random_forest_model(df, draw_plot=False):
     r2 = r2_score(y_test, y_pred)
     print("Random Forest - R2 Score:", r2)
 
-    # Calculating residuals
     residuals = y_test - y_pred
 
     if draw_plot:
-        # Plotting residuals
         plt.figure(figsize=(10, 6))
         plt.scatter(y_pred, residuals, alpha=0.5)
         plt.xlabel('Predicted Pollution')
         plt.ylabel('Residuals')
         plt.title('Random Forest Residual Plot')
-        plt.axhline(y=0, color='r', linestyle='--')  # Adding a horizontal line at y=0
+        plt.axhline(y=0, color='r', linestyle='--')
         plt.savefig('RandomForestResidualPlot.png')
         plt.show()
 
